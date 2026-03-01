@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0b2a66" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+  <title>Equilíbrio 365 — by Sheila (App Demo)</title>
+  <style>
+    :root{
+      --bg:#0b2a66;
+      --bg2:#061a3f;
+      --text:#ffffff;
+      --muted:rgba(255,255,255,.82);
+      --stroke:rgba(255,255,255,.18);
+      --gold:#B08A2E;
+      --gold2:rgba(176,138,46,.22);
+      --danger:#ef4444;
+      --shadow:0 10px 30px rgba(0,0,0,.25);
+      --radius:18px;
+      --btn2:rgba(255,255,255,.12);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; padding:12px;
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background: radial-gradient(1200px 800px at 15% 0%, #1a4bb8 0%, var(--bg) 52%, var(--bg2) 100%);
+    }
+    .wrap{max-width:1200px;margin:0 auto;display:grid;gap:12px}
+    header{
+      display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;
+      padding:12px;border:1px solid var(--stroke);border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      box-shadow:var(--shadow)
+    }
+    .brand{display:flex;gap:10px;align-items:center}
+    .brand img{width:46px;height:46px;border-radius:14px;border:1px solid rgba(255,255,255,.16)}
+    .title h1{margin:0;font-size:16px;letter-spacing:.2px}
+    .title p{margin:4px 0 0;color:var(--muted);font-size:12px}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    button{
+      border:1px solid var(--stroke);
+      background:linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.08));
+      color:var(--text);padding:10px 12px;border-radius:14px;cursor:pointer;font-weight:900;
+      transition:.15s transform ease
+    }
+    button:hover{transform:translateY(-1px)}
+    button.secondary{background:var(--btn2)}
+    button.gold{border-color:rgba(176,138,46,.45);background:linear-gradient(180deg, rgba(176,138,46,.28), rgba(176,138,46,.12))}
+    button.danger{border-color:rgba(239,68,68,.42);background:linear-gradient(180deg, rgba(239,68,68,.25), rgba(239,68,68,.12))}
+    .tabs{
+      display:flex;gap:8px;flex-wrap:wrap;padding:10px;
+      border:1px solid var(--stroke);border-radius:var(--radius);
+      background:rgba(0,0,0,.10);box-shadow:var(--shadow);
+      position:sticky;top:8px;z-index:10;backdrop-filter:blur(10px)
+    }
+    .tabBtn.active{border-color:rgba(176,138,46,.45);box-shadow:0 0 0 2px rgba(176,138,46,.12) inset}
+    .card{
+      padding:14px;border:1px solid var(--stroke);border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      box-shadow:var(--shadow)
+    }
+    .card h2{margin:0 0 10px;font-size:14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .sub{color:var(--muted);font-size:12px;margin-top:4px}
+    .row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1}
+    label{display:block;font-size:12px;color:var(--muted);margin:8px 0 6px}
+    input,textarea,select{
+      width:100%;padding:10px;border-radius:14px;border:1px solid var(--stroke);
+      background:rgba(0,0,0,.18);color:var(--text);outline:none
+    }
+    textarea{min-height:92px;resize:vertical}
+    .grid2{display:grid;gap:12px;grid-template-columns:1.05fr .95fr}@media(max-width:980px){.grid2{grid-template-columns:1fr}}
+    .sep{height:1px;background:var(--stroke);margin:12px 0}
+    .moodRow{display:flex;gap:8px;flex-wrap:wrap}
+    .moodBtn{
+      padding:10px 12px;border-radius:14px;font-size:16px;border:1px solid var(--stroke);
+      background:rgba(0,0,0,.14);display:flex;align-items:center;gap:6px
+    }
+    .mLabel{font-size:11px;margin-left:6px;color:var(--muted);font-weight:900}
+    .moodBtn.active{outline:2px solid rgba(176,138,46,.40);background:var(--gold2)}
+    .item{
+      border:1px solid var(--stroke);border-radius:14px;padding:10px;background:rgba(0,0,0,.14);
+      display:flex;align-items:flex-start;justify-content:space-between;gap:10px
+    }
+    .item b{display:block;font-size:13px}.item .meta{font-size:12px;color:var(--muted);margin-top:2px}
+    .badge{font-size:11px;padding:6px 10px;border-radius:999px;border:1px solid var(--stroke);background:rgba(255,255,255,.08);white-space:nowrap}
+    .hide{display:none}
+    .timerBox{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch}@media(max-width:700px){.timerBox{grid-template-columns:1fr}}
+    .bigTime{font-size:42px;font-weight:900;letter-spacing:1px;text-align:center;padding:14px;border-radius:16px;border:1px solid var(--stroke);background:rgba(0,0,0,.16)}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;border:1px solid var(--stroke);background:rgba(0,0,0,.12);font-weight:900;cursor:pointer;user-select:none}
+    .pill.active{outline:2px solid rgba(176,138,46,.40);background:var(--gold2)}
+    /* Memory game */
+    .mgTop{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .mgGrid{display:grid;gap:10px;margin-top:10px}
+    .mgGrid.easy{grid-template-columns:repeat(4,1fr)}
+    .mgGrid.med{grid-template-columns:repeat(5,1fr)}
+    .mgGrid.hard{grid-template-columns:repeat(6,1fr)}
+    @media(max-width:720px){
+      .mgGrid.easy{grid-template-columns:repeat(4,1fr)}
+      .mgGrid.med{grid-template-columns:repeat(4,1fr)}
+      .mgGrid.hard{grid-template-columns:repeat(4,1fr)}
+    }
+    .cardBtn{
+      aspect-ratio:1/1;
+      border-radius:16px;
+      border:1px solid var(--stroke);
+      background:rgba(0,0,0,.18);
+      display:flex;align-items:center;justify-content:center;
+      font-size:22px;font-weight:900;
+      cursor:pointer; user-select:none;
+      position:relative; overflow:hidden;
+    }
+    .cardBtn.revealed{background:linear-gradient(180deg, rgba(176,138,46,.22), rgba(0,0,0,.12)); border-color:rgba(176,138,46,.35)}
+    .cardBtn.matched{background:rgba(176,138,46,.18); border-color:rgba(176,138,46,.35); opacity:.95}
+    .cardFace{opacity:0; transform:scale(.92); transition:.12s ease}
+    .cardBtn.revealed .cardFace, .cardBtn.matched .cardFace{opacity:1; transform:scale(1)}
+    .cardBack{
+      position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+      color:rgba(255,255,255,.65); font-size:12px; letter-spacing:.8px;
+    }
+    .cardBtn.revealed .cardBack, .cardBtn.matched .cardBack{opacity:0}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <img src="./icons/icon-192.png" alt="Equilíbrio 365">
+      <div class="title">
+        <h1>EQUILÍBRIO 365 <span style="color:var(--gold)">•</span> <span style="font-weight:700;color:rgba(255,255,255,.88)">by Sheila</span></h1>
+        <p id="todayLine">Carregando…</p>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="gold" id="btnInstall" disabled>📲 Instalar</button>
+      <button id="btnShare" class="secondary">🔗 Compartilhar</button>
+      <button id="btnNotif" class="secondary">🔔 Notificações</button>
+      <button id="btnExport" class="secondary">⬇️ Backup</button>
+      <button id="btnImport" class="secondary">⬆️ Restaurar</button>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button class="tabBtn gold active" data-tab="hoje">📌 Hoje</button>
+    <button class="tabBtn secondary" data-tab="prod">✅ Produtividade</button>
+    <button class="tabBtn secondary" data-tab="saude">🧠 Saúde mental</button>
+    <button class="tabBtn secondary" data-tab="memoria">🃏 Jogo da memória</button>
+    <button class="tabBtn secondary" data-tab="cal">📅 Calendário</button>
+    <button class="tabBtn secondary" data-tab="alarmes">⏰ Alarmes</button>
+    <button class="tabBtn secondary" data-tab="dash">📊 Dashboard</button>
+    <button class="tabBtn secondary" data-tab="perfil">👤 Perfil</button>
+  </nav>
+
+  <section class="card" id="tab-hoje">
+    <h2>📌 Hoje • Check-in de alta performance</h2>
+    <div class="grid2">
+      <div class="card" style="background: rgba(0,0,0,.10)">
+        <h2>🧭 Estado atual</h2>
+        <label>🙂 Humor</label>
+        <div class="moodRow" id="moodRow">
+          <button class="moodBtn" data-mood="Muito bem">😄<span class="mLabel">Muito bem</span></button>
+          <button class="moodBtn" data-mood="Bem">🙂<span class="mLabel">Bem</span></button>
+          <button class="moodBtn" data-mood="Neutra">😐<span class="mLabel">Neutra</span></button>
+          <button class="moodBtn" data-mood="Cansada">🥱<span class="mLabel">Cansada</span></button>
+          <button class="moodBtn" data-mood="Ansiosa">😰<span class="mLabel">Ansiosa</span></button>
+          <button class="moodBtn" data-mood="Triste">😔<span class="mLabel">Triste</span></button>
+          <button class="moodBtn" data-mood="Sobrecarregada">😵‍💫<span class="mLabel">Sobrecarregada</span></button>
+          <button class="moodBtn" data-mood="Determinada">💪<span class="mLabel">Determinada</span></button>
+          <button class="moodBtn" data-mood="Grata">🙏<span class="mLabel">Grata</span></button>
+        </div>
+
+        <div class="row">
+          <div><label>Energia (0–10)</label><input id="energy" type="number" min="0" max="10" step="1" placeholder="6"></div>
+          <div><label>Estresse (0–10)</label><input id="stress" type="number" min="0" max="10" step="1" placeholder="4"></div>
+        </div>
+        <div class="row">
+          <div><label>Foco (0–10)</label><input id="focus" type="number" min="0" max="10" step="1" placeholder="7"></div>
+          <div><label>Horas de sono</label><input id="sleep" type="number" min="0" max="24" step="0.5" placeholder="7.5"></div>
+        </div>
+
+        <div class="sep"></div>
+        <h2>🎯 Top 3 do dia</h2>
+        <div class="row">
+          <div><label>Prioridade 1</label><input id="top1" placeholder="Ex.: 2 pomodoros de estudo"></div>
+          <div><label>Prioridade 2</label><input id="top2" placeholder="Ex.: autocuidado 20min"></div>
+          <div><label>Prioridade 3</label><input id="top3" placeholder="Ex.: organizar casa 10min"></div>
+        </div>
+
+        <div class="sep"></div>
+        <h2>💾 Salvar</h2>
+        <div class="row" style="align-items:flex-end">
+          <div><label>Uma vitória do dia</label><input id="goodThing" placeholder="Ex.: consegui manter o foco"></div>
+          <div style="min-width:240px">
+            <button class="gold" id="saveToday" style="width:100%">Salvar check-in</button>
+            <div class="sub" id="saveHint">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="background: rgba(0,0,0,.10)">
+        <h2>📖 Versículo do dia</h2>
+        <div class="item">
+          <div><b id="verseRef">—</b><div class="meta" id="verseText">—</div></div>
+          <div class="badge" id="verseDayTag">Hoje</div>
+        </div>
+
+        <div class="sep"></div>
+        <h2>🧘 Ferramentas rápidas</h2>
+        <div class="item">
+          <div><b>Respiração 4–7–8 (2 min)</b><div class="meta" id="breathHint">Inicie e acompanhe o ritmo.</div></div>
+          <button class="gold" id="btnBreath">▶ Iniciar</button>
+        </div>
+
+        <div class="sep"></div>
+        <div class="item">
+          <div><b>Mini diário (2 linhas)</b><div class="meta">O que eu sinto + o que eu preciso</div></div>
+          <button class="secondary" id="btnMiniJournal">Abrir</button>
+        </div>
+
+        <div class="sep"></div>
+        <div class="item">
+          <div><b>Alerta importante</b><div class="meta">Em risco imediato: <b>CVV 188</b> (24h) • <b>192</b> (SAMU) • <b>190</b></div></div>
+          <div class="badge">Segurança</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card hide" id="tab-prod">
+    <h2>✅ Produtividade • Tarefas + Pomodoro</h2>
+    <div class="grid2">
+      <div class="card" style="background: rgba(0,0,0,.10)">
+        <h2>🧠 Pomodoro</h2>
+        <div class="row">
+          <div><label>Foco</label><input id="pomoTopic" placeholder="Ex.: estudos, trabalho, casa…"></div>
+          <div><label>Duração (min)</label><input id="pomoMin" type="number" min="5" step="5" placeholder="25"></div>
+        </div>
+        <div class="timerBox">
+          <div class="bigTime" id="timeLeft">25:00</div>
+          <div class="card" style="background: rgba(0,0,0,.12)">
+            <div class="row">
+              <button class="gold" id="btnStart">▶ Iniciar</button>
+              <button class="secondary" id="btnPause">⏸ Pausar</button>
+              <button class="danger" id="btnReset">⟲ Reset</button>
+            </div>
+            <div class="sep"></div>
+            <div class="row">
+              <button class="secondary" id="btnShort">☕ Pausa 5</button>
+              <button class="secondary" id="btnLong">🛌 Pausa 15</button>
+            </div>
+            <div class="sub">Instalar como app melhora notificações.</div>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+        <h2>🗂️ Tarefas (com +)</h2>
+        <div class="row"><input id="taskText" placeholder="Ex.: revisar aula • caminhar 10min" /><button class="gold" id="btnAddTask">＋</button></div>
+        <div class="sub">Toque para marcar concluída.</div>
+        <div id="tasksList" style="display:grid; gap:8px; margin-top:10px"></div>
+      </div>
+
+      <div class="card" style="background: rgba(0,0,0,.10)">
+        <h2>📝 Anotações & Diário</h2>
+        <label>Anotações</label>
+        <textarea id="notes" placeholder="O que preciso lembrar?"></textarea>
+        <div class="sep"></div>
+        <label>Diário</label>
+        <textarea id="diary" placeholder="Escreva livremente (offline)"></textarea>
+        <div class="row" style="margin-top:8px">
+          <button id="btnDiaryToday" class="secondary">📌 Inserir data</button>
+          <button id="btnClearDiary" class="danger">🧹 Limpar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card hide" id="tab-saude">
+    <h2>🧠 Saúde mental • Plano de cuidado</h2>
+    <div class="grid2">
+      <div class="card" style="background: rgba(0,0,0,.10)">
+        <h2>🧩 O que me ajuda (lista)</h2>
+        <div class="row"><input id="copingText" placeholder="Ex.: banho, oração, música, caminhar…" /><button class="gold" id="btnAddCoping">＋</button></div>
+        <div id="copingList" style="display:grid; gap:8px; margin-top:10px"></div>
+
+        <div class="sep"></div>
+        <h2>📝 Mini diário</h2>
+        <label>O que eu sinto?</label><textarea id="mjFeel"></textarea>
+        <label>O que eu preciso?</label><textarea id="mjNeed"></textarea>
+        <div class="row" style="margin-top:8px">
+          <button class="gold" id="btnSaveMiniJournal">Salvar</button>
+          <button class="secondary" id="btnCopyMiniJournal">Copiar</button>
+        </div>
+      </div>
+
+      <div class="card" style="background: rgba(0,0,0,.10)">
+        <h2>🌿 Autocuidado do dia</h2>
+        <div class="row" style="flex-wrap:wrap; gap:10px" id="selfCareRow">
+          <div class="pill" data-s="banho">🚿 Banho</div>
+          <div class="pill" data-s="comida">🍽️ Alimentação</div>
+          <div class="pill" data-s="agua">💧 Água</div>
+          <div class="pill" data-s="sol">☀️ Sol</div>
+          <div class="pill" data-s="resp">🫁 Respiração</div>
+          <div class="pill" data-s="oracao">🙏 Oração</div>
+          <div class="pill" data-s="sono">😴 Sono</div>
+          <div class="pill" data-s="pausa">🧘 Pausa</div>
+        </div>
+
+        <div class="sep"></div>
+        <h2>🧷 Contatos de apoio</h2>
+        <div class="row">
+          <div><label>Contato 1</label><input id="support1" placeholder="Nome + telefone" /></div>
+          <div><label>Contato 2</label><input id="support2" placeholder="Nome + telefone" /></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card hide" id="tab-memoria">
+    <h2>🃏 Jogo da memória • Treino rápido de foco</h2>
+    <div class="mgTop">
+      <div class="sub">Use como pausa do Pomodoro: 2–5 minutos.</div>
+      <div class="row" style="max-width:520px">
+        <div>
+          <label>Nível</label>
+          <select id="mgLevel">
+            <option value="easy">Fácil (8 pares)</option>
+            <option value="med">Médio (10 pares)</option>
+            <option value="hard">Difícil (12 pares)</option>
+          </select>
+        </div>
+        <div>
+          <label>Recorde</label>
+          <input id="mgBest" disabled value="—">
+        </div>
+      </div>
+      <div class="row" style="max-width:520px">
+        <button class="gold" id="mgNew">🔄 Novo jogo</button>
+        <button class="secondary" id="mgHint">💡 Dica</button>
+      </div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <div class="item">
+        <div><b>Tempo</b><div class="meta"><span id="mgTime">0</span>s</div></div>
+        <div class="badge">cronômetro</div>
+      </div>
+      <div class="item">
+        <div><b>Tentativas</b><div class="meta"><span id="mgMoves">0</span></div></div>
+        <div class="badge">movimentos</div>
+      </div>
+      <div class="item">
+        <div><b>Pares</b><div class="meta"><span id="mgPairs">0</span>/<span id="mgTotalPairs">0</span></div></div>
+        <div class="badge">progresso</div>
+      </div>
+    </div>
+    <div class="mgGrid easy" id="mgGrid"></div>
+    <div class="sub" id="mgMsg" style="margin-top:10px">—</div>
+  </section>
+
+  <section class="card hide" id="tab-cal">
+    <h2>📅 Calendário</h2>
+    <div class="row">
+      <div><label>Data</label><input id="calDate" type="date" /></div>
+      <div><label>Humor (do check-in)</label><input id="calMood" disabled /></div>
+    </div>
+    <div class="row">
+      <div><label>Notas</label><textarea id="calNotes"></textarea></div>
+      <div><label>O que foi difícil</label><textarea id="calHard"></textarea></div>
+    </div>
+    <button class="gold" id="btnSaveCal">Salvar dia</button>
+  </section>
+
+  <section class="card hide" id="tab-alarmes">
+    <h2>⏰ Alarmes</h2>
+    <div class="row">
+      <div><label>Título</label><input id="alarmTitle" placeholder="Ex.: terapia, estudo, caminhada" /></div>
+      <div><label>Data e hora</label><input id="alarmWhen" type="datetime-local" /></div>
+    </div>
+    <div class="row">
+      <button id="btnAddAlarm" class="gold">➕ Criar</button>
+      <button id="btnTestNotif" class="secondary">🔔 Testar</button>
+      <button id="btnAddToCalendar" class="secondary">📅 Agenda</button>
+    </div>
+    <div class="sep"></div>
+    <div id="alarmsList" style="display:grid; gap:8px"></div>
+  </section>
+
+  <section class="card hide" id="tab-dash">
+    <h2>📊 Dashboard</h2>
+    <div class="row">
+      <div class="item"><div><b>Hoje</b><div class="meta"><span id="dashMood">—</span> • energia <span id="dashEnergy">—</span> • estresse <span id="dashStress">—</span></div></div><div class="badge" id="dashTodayStatus">—</div></div>
+      <div class="item"><div><b>7 dias</b><div class="meta">check-ins: <span id="dash7">0</span> • tarefas: <span id="dashTasks7">0</span></div></div><div class="badge">consistência</div></div>
+      <div class="item"><div><b>Pomodoros (7d)</b><div class="meta"><span id="dashPomo7">0</span> sessões</div></div><div class="badge">foco</div></div>
+    </div>
+    <div class="sep"></div>
+    <h2>🏆 Treino mental</h2>
+    <div class="row">
+      <div class="item"><div><b>Recorde (memória)</b><div class="meta" id="dashMemoryBest">—</div></div><div class="badge">cognição</div></div>
+      <div class="item"><div><b>Vitórias</b><div class="meta"><span id="dashMemoryWins">0</span></div></div><div class="badge">progresso</div></div>
+    </div>
+  </section>
+
+  <section class="card hide" id="tab-perfil">
+    <h2>👤 Perfil</h2>
+    <div class="row">
+      <div><label>Nome</label><input id="pName" placeholder="Seu nome" /></div>
+      <div><label>Meta do momento</label><input id="pGoal" placeholder="Ex.: concurso, saúde, estudos" /></div>
+    </div>
+    <div class="row">
+      <div><label>Rotina ideal</label><input id="pRoutine" placeholder="Ex.: manhã de foco, tarde leve" /></div>
+      <div><label>Lugar de calma</label><input id="pCalm" placeholder="Ex.: meu quarto, igreja, parque" /></div>
+    </div>
+    <div class="sep"></div>
+    <button class="danger" id="btnResetAll">🧨 Zerar tudo</button>
+  </section>
+
+  <footer class="card"><div class="sub">Equilíbrio 365 — elegante, moderno, instalável e offline.</div></footer>
+</div>
+
+<script>
+
+const LS_KEY="equilibrio365_demo";
+let deferredPrompt=null;
+function toast(msg){
+  const p=document.createElement("div");
+  p.style.position="fixed";p.style.bottom="14px";p.style.left="50%";p.style.transform="translateX(-50%)";
+  p.style.padding="10px 12px";p.style.border="1px solid rgba(255,255,255,.18)";
+  p.style.borderRadius="14px";p.style.background="rgba(0,0,0,.45)";
+  p.style.backdropFilter="blur(8px)";p.style.zIndex="9999";
+  p.innerText=msg;document.body.appendChild(p);setTimeout(()=>p.remove(),2200)
+}
+function pad(n){return String(n).padStart(2,"0")}
+function toYMD(d){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
+function setTab(name){
+  document.querySelectorAll(".tabBtn").forEach(b=>{
+    const on=b.dataset.tab===name;
+    b.classList.toggle("active",on);
+    b.classList.toggle("gold",on);
+    b.classList.toggle("secondary",!on);
+  });
+  ["hoje","prod","saude","memoria","cal","alarmes","dash","perfil"].forEach(t=>document.getElementById("tab-"+t).classList.toggle("hide",t!==name));
+}
+document.getElementById("tabs").addEventListener("click",(e)=>{const btn=e.target.closest(".tabBtn");if(btn)setTab(btn.dataset.tab)});
+document.getElementById("todayLine").innerText=new Date().toLocaleDateString("pt-BR",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+window.addEventListener("beforeinstallprompt",(e)=>{e.preventDefault();deferredPrompt=e;const btn=document.getElementById("btnInstall");btn.disabled=false;});
+document.getElementById("btnInstall").addEventListener("click",async()=>{
+  if(!deferredPrompt){alert("Para instalar: Chrome ⋮ > Adicionar à tela inicial");return;}
+  deferredPrompt.prompt();deferredPrompt=null;toast("Pedido de instalação enviado ✅");
+});
+document.getElementById("btnShare").onclick=async()=>{
+  const txt="Equilíbrio 365 — by Sheila";
+  if(navigator.share){try{await navigator.share({title:"Equilíbrio 365",text:txt});return}catch(e){}}
+  await navigator.clipboard.writeText(txt);toast("Copiado ✅");
+};
+document.getElementById("btnExport").onclick=()=>toast("Demo: backup na versão final ✅");
+document.getElementById("btnImport").onclick=()=>toast("Demo: restaurar na versão final ✅");
+document.getElementById("btnNotif").onclick=()=>toast("Demo: notificações na versão final ✅");
+setTab("hoje");
+
+</script>
+
+<audio id="alarmSound" preload="auto">
+  <source src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" type="audio/ogg">
+</audio>
+</body>
+</html>
